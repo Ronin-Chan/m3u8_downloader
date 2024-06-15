@@ -12,7 +12,7 @@ def download_ts_segment(ts_url, temp_dir, i):
         f.write(ts_response.content)
     print(f"Downloaded {ts_filename}")
 
-def download_m3u8(url, output_name):
+def download_m3u8(url, output_name, ffmpeg_path):
     # Get the current script's directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -47,7 +47,7 @@ def download_m3u8(url, output_name):
         for ts_file in ts_files:
             f.write(f"file '{ts_file}'\n")
     output_file = os.path.join(current_dir, output_name)
-    os.system(f"E:\\ffmpeg\\bin\\ffmpeg.exe -f concat -safe 0 -i {ts_list_file} -c copy {output_file}")
+    os.system(f"{ffmpeg_path} -f concat -safe 0 -i {ts_list_file} -c copy {output_file}")
     
     # Step 6: Cleanup temporary .ts files and directory
     os.remove(ts_list_file)
@@ -61,8 +61,11 @@ def download_m3u8(url, output_name):
 
 # enter url end with .m3u8
 m3u8_url = ''
+# enter ffmpeg path
+ffmeg_path = 'E:\\ffmpeg\\bin\\ffmpeg.exe'
 
 now = datetime.now()
 suffix = now.strftime("%Y%m%d_%H%M%S")
 output_filename = f'output_{suffix}.mp4'
-download_m3u8(m3u8_url, output_filename)
+
+download_m3u8(m3u8_url, output_filename, ffmeg_path)
